@@ -1,0 +1,20 @@
+http:
+  routers:
+    my-router:
+      entryPoints:
+      - http
+      middlewares:
+      - plugindemo
+      service: service-whoami
+      rule: Path(`/whoami`)
+  services:
+    service-whoami:
+      loadBalancer:
+        servers:
+        - url: http://localhost:5000/
+        passHostHeader: false
+  middlewares:
+    plugindemo:
+      plugin:
+        demo:
+          Header: x-real-ip
