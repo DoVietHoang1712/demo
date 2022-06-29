@@ -1,7 +1,9 @@
 displayName: ASN IP2Location
 type: middleware
-import: Golang/Traefik-plugin
+import: github.com/DoVietHoang1712/demo
+
 summary: traefik plugin to whitelist or blacklist requests based on geolocation
+
 testData:
   enabled: true
   header: x-real-ip
