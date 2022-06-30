@@ -55,7 +55,7 @@ func New(_ context.Context, next http.Handler, cfg *Config, name string) (http.H
 			name: name,
 		}, nil
 	}
-
+	log.Printf("[geoip2] DBPathL `%s`", cfg.DatabaseFilePath)
 	if _, err := os.Stat(cfg.DatabaseFilePath); err != nil {
 		log.Printf("[geoip2] DB `%s' not found: %v", cfg.DatabaseFilePath, err)
 		return &Plugin{
