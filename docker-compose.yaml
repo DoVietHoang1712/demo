@@ -3,17 +3,18 @@ version: "3.3"
 services:
 
   traefik:
-    image: "traefik-with-demo-plugin"
+    build: 
+      context: .
     container_name: "traefik"
     command:
       #- "--log.level=DEBUG"
+      - "--api.dashboard=true"
       - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+      - "--entryPoints.http.address=:9000"
+      - "--entryPoints.http.forwardedHeaders.insecure=true"
       - "--experimental.localPlugins.demo.moduleName=github.com/DoVietHoang1712/demo"
       - "--log.level=DEBUG"
-      - "--providers.file.filename=/plugins-local/srcgithub.com/DoVietHoang1712/demo/rules-demo.yaml"
+      - "--providers.file.filename=/plugins-local/src/github.com/DoVietHoang1712/demo/rules-demo.yaml"
     ports:
       - "80:80"
       - "8080:8080"
@@ -23,7 +24,9 @@ services:
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
+    ports:
+      - "5000:80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
+    #   - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+    #   - "traefik.http.routers.whoami.entrypoints=web"

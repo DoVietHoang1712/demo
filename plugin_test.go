@@ -1,7 +1,6 @@
 package demo_test
 
 import (
-	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,21 +12,9 @@ const (
 	pluginName = "asnblock"
 )
 
-type noopHandler struct{}
-
-func (n noopHandler) ServeHTTP(rw http.ResponseWriter, _ *http.Request) {
-	rw.WriteHeader(http.StatusTeapot)
-}
-
 func TestNew(t *testing.T) {
 	t.Run("Disabled", func(t *testing.T) {
-		conf := asnblock.CreateConfig()
-		conf.Header = "X-Real-IP"
-		plugin, err := asnblock.New(context.TODO(), &noopHandler{}, conf, pluginName)
-		if err != nil {
-			t.Fatal(err)
-		}
-
+		plugin, _ := asnblock.CreatePlugin("X-Real-IP", []string{"206948"}, pluginName)
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 
 		rr := httptest.NewRecorder()
@@ -41,13 +28,7 @@ func TestNew(t *testing.T) {
 
 func TestPlugin_ServeHTTP(t *testing.T) {
 	t.Run("Allowed", func(t *testing.T) {
-		cfg := asnblock.CreateConfig()
-		cfg.Header = "X-Real-IP"
-		cfg.AllowedASNs = []string{"35236"}
-		plugin, err := asnblock.New(context.TODO(), &noopHandler{}, cfg, pluginName)
-		if err != nil {
-			t.Fatal(err)
-		}
+		plugin, _ := asnblock.CreatePlugin("X-Real-IP", []string{"35236"}, pluginName)
 
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		req.Header.Set("X-Real-IP", "188.92.102.22")
@@ -62,13 +43,7 @@ func TestPlugin_ServeHTTP(t *testing.T) {
 
 	t.Run("DisallowedASN", func(t *testing.T) {
 		t.Run("Pass", func(t *testing.T) {
-			cfg := asnblock.CreateConfig()
-			cfg.Header = "X-Real-IP"
-			cfg.AllowedASNs = []string{"206948"}
-			plugin, err := asnblock.New(context.TODO(), &noopHandler{}, cfg, pluginName)
-			if err != nil {
-				t.Fatal(err)
-			}
+			plugin, _ := asnblock.CreatePlugin("X-Real-IP", []string{"206948"}, pluginName)
 
 			req := httptest.NewRequest(http.MethodGet, "/", nil)
 
@@ -84,13 +59,7 @@ func TestPlugin_ServeHTTP(t *testing.T) {
 		})
 
 		t.Run("Forbid", func(t *testing.T) {
-			cfg := asnblock.CreateConfig()
-			cfg.AllowedASNs = []string{"35236"}
-			cfg.Header = "X-Real-IP"
-			plugin, err := asnblock.New(context.TODO(), &noopHandler{}, cfg, pluginName)
-			if err != nil {
-				t.Fatal(err)
-			}
+			plugin, _ := asnblock.CreatePlugin("X-Real-IP", []string{"35236"}, pluginName)
 
 			req := httptest.NewRequest(http.MethodGet, "/", nil)
 			// Define some random polish IP address.

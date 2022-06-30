@@ -38,6 +38,7 @@ type Plugin struct {
 	enabled        bool
 	lookup         LookupGeoIP2
 	header         string
+	dbPath         string
 }
 
 // New creates a new plugin handler.
@@ -78,6 +79,7 @@ func New(_ context.Context, next http.Handler, cfg *Config, name string) (http.H
 		disallowedASNs: cfg.DisallowedASNs,
 		header:         cfg.Header,
 		lookup:         lookup,
+		dbPath:         cfg.DatabaseFilePath,
 	}, nil
 }
 
@@ -93,8 +95,11 @@ func (p *Plugin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			if errors.Is(err, ErrNotAllowed) {
 				log.Printf("%s: %s - access denied for %s (%v)", p.name, req.Host, ip, ipDetail)
+				rw.WriteHeader(http.StatusForbidden)
+
 			} else {
 				log.Printf("%s: %s - %v", p.name, req.Host, err)
+				p.next.ServeHTTP(rw, req)
 			}
 		}
 	}
@@ -158,4 +163,20 @@ func (p *Plugin) CheckAllowed(ip string) (*GeoIPResult, error) {
 // Lookup ASN from a given IP address.
 func (p *Plugin) Lookup(ip string) (*GeoIPResult, error) {
 	return p.lookup(net.ParseIP(ip))
+}
+
+type noopHandler struct{}
+
+func (n noopHandler) ServeHTTP(rw http.ResponseWriter, _ *http.Request) {
+	rw.WriteHeader(http.StatusTeapot)
+}
+
+func CreatePlugin(header string, ans []string, pluginName string) (http.Handler, error) {
+	conf := CreateConfig()
+	conf.Header = header
+	plug, err := New(context.TODO(), &noopHandler{}, conf, pluginName)
+	if err != nil {
+		return nil, err
+	}
+	return plug, nil
 }
