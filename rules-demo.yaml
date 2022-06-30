@@ -11,12 +11,12 @@ http:
     service-whoami:
       loadBalancer:
         servers:
-        - url: http://localhost:5000/
-        passHostHeader: false
+        - url: http://172.18.80.1:5000/
   middlewares:
     plugindemo:
       plugin:
         demo:
-          Header: x-real-ip
+          Enabled: true
+          Header: X-Real-Ip
           DatabaseFilePath: /plugins-local/src/github.com/DoVietHoang1712/demo/GeoLite2-ASN.mmdb
           AllowedASNs: 206948

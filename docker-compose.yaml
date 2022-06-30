@@ -6,6 +6,7 @@ services:
     build: 
       context: .
     container_name: "traefik"
+    network_mode: "bridge"
     command:
       #- "--log.level=DEBUG"
       - "--api.dashboard=true"
@@ -15,18 +16,24 @@ services:
       - "--experimental.localPlugins.demo.moduleName=github.com/DoVietHoang1712/demo"
       - "--log.level=DEBUG"
       - "--providers.file.filename=/plugins-local/src/github.com/DoVietHoang1712/demo/rules-demo.yaml"
+      - "--pilot.token=0e58ac5a-f935-4a69-8b8a-e1a23cb5880a"
     ports:
       - "80:80"
       - "8080:8080"
+      - "9000:9000"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
+    network_mode: "bridge"
     ports:
       - "5000:80"
     labels:
       - "traefik.enable=true"
-    #   - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-    #   - "traefik.http.routers.whoami.entrypoints=web"
+      # - "traefik.http.routers.whoami.rule=Path(`/whoami`)"
+      # - "traefik.http.routers.whoami.entrypoints=http"
+      # - "traefik.http.routers.whoami.service=service-whoami"
+      # - "traefik.http.services.service-whoami.loadBalancer.server.url=http://localhost:5000"
+      # - "traefik.http.services.service-whoami.loadBalancer.passHostHeader=false"

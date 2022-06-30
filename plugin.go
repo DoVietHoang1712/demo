@@ -85,6 +85,10 @@ func New(_ context.Context, next http.Handler, cfg *Config, name string) (http.H
 
 // ServeHTTP implements http.Handler interface.
 func (p *Plugin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+	p.header = "X-Real-Ip"
+	p.enabled = true
+	log.Println(p.allowedASNs)
+	log.Println(p.disallowedASNs)
 	if !p.enabled {
 		p.next.ServeHTTP(rw, req)
 		return
@@ -92,6 +96,7 @@ func (p *Plugin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	ips := p.GetRemoteIPs(req, p.header)
 	for _, ip := range ips {
 		ipDetail, err := p.CheckAllowed(ip)
+		log.Printf("ASN: %d", ipDetail.asn)
 		if err != nil {
 			if errors.Is(err, ErrNotAllowed) {
 				log.Printf("%s: %s - access denied for %s (%v)", p.name, req.Host, ip, ipDetail)
