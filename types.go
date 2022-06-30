@@ -8,7 +8,7 @@ import (
 )
 
 // DefaultDBPath default GeoIP2 database path.
-const DefaultDBPath = "GeoLite2-ASN.mmdb"
+const DefaultDBPath = "/plugins-local/src/github.com/DoVietHoang1712/demo/GeoLite2-ASN.mmdb"
 const DefaultHeader = "x-real-ip"
 
 // GeoIPResult GeoIPResult.
