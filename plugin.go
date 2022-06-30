@@ -38,6 +38,7 @@ type Plugin struct {
 	enabled        bool
 	lookup         LookupGeoIP2
 	header         string
+	dbPath         string
 }
 
 // New creates a new plugin handler.
@@ -54,7 +55,7 @@ func New(_ context.Context, next http.Handler, cfg *Config, name string) (http.H
 			name: name,
 		}, nil
 	}
-
+	log.Printf("[geoip2] DBPathL `%s`", cfg.DatabaseFilePath)
 	if _, err := os.Stat(cfg.DatabaseFilePath); err != nil {
 		log.Printf("[geoip2] DB `%s' not found: %v", cfg.DatabaseFilePath, err)
 		return &Plugin{
@@ -78,6 +79,7 @@ func New(_ context.Context, next http.Handler, cfg *Config, name string) (http.H
 		disallowedASNs: cfg.DisallowedASNs,
 		header:         cfg.Header,
 		lookup:         lookup,
+		dbPath:         cfg.DatabaseFilePath,
 	}, nil
 }
 

@@ -9,3 +9,4 @@ summary: traefik plugin to whitelist or blacklist requests based on geolocation
 testData:
   enabled: true
   header: x-real-ip
+  dbPath: ./GeoLite2-ASN.mmdb

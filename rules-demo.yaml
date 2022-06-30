@@ -18,3 +18,4 @@ http:
       plugin:
         demo:
           Header: x-real-ip
+          DatabaseFilePath: ./GeoLite2-ASN.mmdb
