@@ -19,3 +19,4 @@ http:
         demo:
           Header: x-real-ip
           DatabaseFilePath: /plugins-local/src/github.com/DoVietHoang1712/demo/GeoLite2-ASN.mmdb
+          AllowedASNs: 206948
