@@ -95,8 +95,11 @@ func (p *Plugin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			if errors.Is(err, ErrNotAllowed) {
 				log.Printf("%s: %s - access denied for %s (%v)", p.name, req.Host, ip, ipDetail)
+				rw.WriteHeader(http.StatusForbidden)
+				
 			} else {
 				log.Printf("%s: %s - %v", p.name, req.Host, err)
+				p.next.ServeHTTP(rw, req)
 			}
 		}
 	}
