@@ -7,6 +7,9 @@ services:
       context: .
     container_name: "traefik"
     network_mode: "bridge"
+    environment:
+      - CRON_EXPRESSION=0 9 * * 3
+      - LICENSE=ZGvuxCAnfiIe1E7l
     command:
       #- "--log.level=DEBUG"
       - "--api.dashboard=true"

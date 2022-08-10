@@ -1,0 +1,11 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: my-geoblock
+spec:
+  plugin:
+    plugindemo:
+      Enabled: true
+      Header: X-Real-Ip
+      DatabaseFilePath: /plugins-local/src/github.com/DoVietHoang1712/demo/GeoLite2-ASN.mmdb
+      AllowedASNs: 206948

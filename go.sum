@@ -1,2 +1,6 @@
+github.com/IncSW/geoip2 v0.1.1 h1:afzzYF7n9JbdcPy8aiBSgBJuXi4mTWXZ3z6V3o6Vg34=
+github.com/IncSW/geoip2 v0.1.1/go.mod h1:adcasR40vXiUBjtzdaTTKL/6wSf+fgO4M8Gve/XzPUk=
 github.com/IncSW/geoip2 v0.1.2 h1:v7iAyDiNZjHES45P1JPM3SMvkw0VNeJtz0XSVxkRwOY=
 github.com/IncSW/geoip2 v0.1.2/go.mod h1:adcasR40vXiUBjtzdaTTKL/6wSf+fgO4M8Gve/XzPUk=
+github.com/robfig/cron v1.2.0 h1:ZjScXvvxeQ63Dbyxy76Fj3AT3Ut0aKsyd2/tl3DTMuQ=
+github.com/robfig/cron v1.2.0/go.mod h1:JGuDeoQd7Z6yL4zQhZ3OPEVHB7fL6Ka6skscFHfmt2k=
